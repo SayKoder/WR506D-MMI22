@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello DemoController!{% endblock %}
+
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Demo</title>
+    <script>
+        // Fonction pour mettre à jour la date et l'heure
+        function updateDateTime() {
+            const date = new Date();
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false,
+                timeZone: 'Europe/Paris'  // Vous pouvez changer le fuseau horaire si nécessaire
+            };
+            // Convertir la date en chaîne formatée en utilisant les options définies
+            const dateTimeString = date.toLocaleString('fr-FR', options);
+            document.getElementById('current-datetime').textContent = dateTimeString;
+        }
+
+        // Mettre à jour l'heure toutes les secondes (1000 ms)
+        setInterval(updateDateTime, 1000);
+
+        // Appeler la fonction une première fois pour afficher immédiatement la date
+        window.onload = updateDateTime;
+    </script>
+</head>
+<body>
+    <h1>Date actuelle : <span id="current-datetime"></span></h1>
+</body>
+</html>
+{% endblock %}
