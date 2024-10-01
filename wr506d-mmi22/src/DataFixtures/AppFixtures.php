@@ -76,7 +76,7 @@ class AppFixtures extends Fixture
             shuffle($createdCategories);
             $createdCategoriesSliced = array_slice($createdCategories, 0, 2);
             foreach ($createdCategoriesSliced as $category) {
-                $movie->addCategory($category);
+                $movie->addIdCategory($category);
             }
 
             $manager->persist($movie);

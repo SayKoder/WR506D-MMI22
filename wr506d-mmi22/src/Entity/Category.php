@@ -30,7 +30,7 @@ class Category
     /**
      * @var Collection<int, Movie>
      */
-    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'categories')]
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'id_category')]
     private Collection $movies;
 
     public function __construct()
@@ -90,7 +90,7 @@ class Category
     {
         if (!$this->movies->contains($movie)) {
             $this->movies->add($movie);
-            $movie->addCategory($this);
+            $movie->addIdCategory($this);
         }
 
         return $this;
@@ -99,7 +99,9 @@ class Category
     public function removeMovie(Movie $movie): static
     {
         if ($this->movies->removeElement($movie)) {
-            $movie->removeCategory($this);
+            if ($movie->getIdCategory()->contains($this)) {
+                $movie->removeIdCategory($this); 
+            }
         }
 
         return $this;
