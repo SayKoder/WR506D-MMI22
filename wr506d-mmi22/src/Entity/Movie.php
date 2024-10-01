@@ -53,7 +53,7 @@ class Movie
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'movies')]
-    private Collection $categories;
+    private Collection $id_category;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -61,17 +61,11 @@ class Movie
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updateAt = null;
 
-    /**
-     * @var Collection<int, Category>
-     */
-    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'movie')]
-    private Collection $id_category;
 
     public function __construct()
     {
         $this->actors = new ArrayCollection();
-        $this->categories = new ArrayCollection();
-        $this->id_category = new ArrayCollection();
+        $this->id_category = new ArrayCollection(); 
     }
 
     public function getId(): ?int
@@ -205,23 +199,28 @@ class Movie
     /**
      * @return Collection<int, Category>
      */
-    public function getCategories(): Collection
+    public function getIdCategory(): Collection
     {
-        return $this->categories;
+        return $this->id_category;
     }
 
-    public function addCategory(Category $category): static
+    public function addIdCategory(Category $idCategory): static
     {
-        if (!$this->categories->contains($category)) {
-            $this->categories->add($category);
+        if (!$this->id_category->contains($idCategory)) {
+            $this->id_category->add($idCategory);
+            $idCategory->addMovie($this);
         }
 
         return $this;
     }
 
-    public function removeCategory(Category $category): static
+    public function removeCategory(Category $idCategory): static
     {
-        $this->categories->removeElement($category);
+        if ($this->id_category->removeElement($idCategory)) {
+            if ($idCategory->getMovies()->contains($this)) {
+                $idCategory->removeMovie($this); // Assurez-vous d'utiliser removeMovie
+            }
+        }
 
         return $this;
     }
@@ -253,35 +252,5 @@ class Movie
     public function setCreatedAtValue(): void
     {
         $this->createdAt = new \DateTimeImmutable();
-    }
-
-    /**
-     * @return Collection<int, Category>
-     */
-    public function getIdCategory(): Collection
-    {
-        return $this->id_category;
-    }
-
-    public function addIdCategory(Category $idCategory): static
-    {
-        if (!$this->id_category->contains($idCategory)) {
-            $this->id_category->add($idCategory);
-            $idCategory->setMovie($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIdCategory(Category $idCategory): static
-    {
-        if ($this->id_category->removeElement($idCategory)) {
-            // set the owning side to null (unless already changed)
-            if ($idCategory->getMovie() === $this) {
-                $idCategory->setMovie(null);
-            }
-        }
-
-        return $this;
     }
 }
