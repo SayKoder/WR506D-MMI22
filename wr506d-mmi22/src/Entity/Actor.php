@@ -8,10 +8,15 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial', 'firstname' => 'partial', 'movies.title'=>'partial'])]
+
 class Actor
 {
     #[ORM\Id]
@@ -54,6 +59,9 @@ class Actor
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $updateAt = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $deathDate = null;
 
     public function __construct()
     {
@@ -213,5 +221,17 @@ class Actor
     public function setCreatedAtValue(): void
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getDeathDate(): ?\DateTimeInterface
+    {
+        return $this->deathDate;
+    }
+
+    public function setDeathDate(?\DateTimeInterface $deathDate): static
+    {
+        $this->deathDate = $deathDate;
+
+        return $this;
     }
 }

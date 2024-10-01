@@ -61,10 +61,17 @@ class Movie
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updateAt = null;
 
+    /**
+     * @var Collection<int, Category>
+     */
+    #[ORM\OneToMany(targetEntity: Category::class, mappedBy: 'movie')]
+    private Collection $id_category;
+
     public function __construct()
     {
         $this->actors = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->id_category = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -246,5 +253,35 @@ class Movie
     public function setCreatedAtValue(): void
     {
         $this->createdAt = new \DateTimeImmutable();
+    }
+
+    /**
+     * @return Collection<int, Category>
+     */
+    public function getIdCategory(): Collection
+    {
+        return $this->id_category;
+    }
+
+    public function addIdCategory(Category $idCategory): static
+    {
+        if (!$this->id_category->contains($idCategory)) {
+            $this->id_category->add($idCategory);
+            $idCategory->setMovie($this);
+        }
+
+        return $this;
+    }
+
+    public function removeIdCategory(Category $idCategory): static
+    {
+        if ($this->id_category->removeElement($idCategory)) {
+            // set the owning side to null (unless already changed)
+            if ($idCategory->getMovie() === $this) {
+                $idCategory->setMovie(null);
+            }
+        }
+
+        return $this;
     }
 }

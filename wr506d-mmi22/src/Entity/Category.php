@@ -18,12 +18,6 @@ class Category
     #[ORM\Column]
     private ?int $id = null;
 
-    /**
-     * @var Collection<int, Movie>
-     */
-    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'categories')]
-    private Collection $movies;
-
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
@@ -33,6 +27,12 @@ class Category
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updateAt = null;
 
+    /**
+     * @var Collection<int, Movie>
+     */
+    #[ORM\ManyToMany(targetEntity: Movie::class, mappedBy: 'categories')]
+    private Collection $movies;
+
     public function __construct()
     {
         $this->movies = new ArrayCollection();
@@ -41,6 +41,41 @@ class Category
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getTitre(): ?string
+    {
+        return $this->titre;
+    }
+
+    public function setTitre(string $titre): static
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
+    public function getUpdateAt(): ?\DateTimeImmutable
+    {
+        return $this->updateAt;
+    }
+
+    public function setUpdateAt(?\DateTimeImmutable $updateAt): static
+    {
+        $this->updateAt = $updateAt;
+
+        return $this;
     }
 
     /**
@@ -68,46 +103,5 @@ class Category
         }
 
         return $this;
-    }
-
-    public function getTitre(): ?string
-    {
-        return $this->titre;
-    }
-
-    public function setTitre(string $titre): static
-    {
-        $this->titre = $titre;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->createdAt;
-    }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): static
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    public function getUpdateAt(): ?\DateTimeImmutable
-    {
-        return $this->updateAt;
-    }
-
-    public function setUpdateAt(?\DateTimeImmutable $updateAt): static
-    {
-        $this->updateAt = $updateAt;
-
-        return $this;
-    }
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
-    {
-        $this->createdAt = new \DateTimeImmutable();
     }
 }
