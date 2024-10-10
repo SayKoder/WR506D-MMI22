@@ -68,13 +68,13 @@ class AppFixtures extends Fixture
             $movie->setCreatedAt(new DateTimeImmutable());
 
             shuffle($createdActors);
-            $createdActorsSliced = array_slice($createdActors, 0, 4);
+            $createdActorsSliced = array_slice($createdActors, 1, 4);
             foreach ($createdActorsSliced as $actor) {
                 $movie->addActor($actor);
             }
 
             shuffle($createdCategories);
-            $createdCategoriesSliced = array_slice($createdCategories, 0, 2);
+            $createdCategoriesSliced = array_slice($createdCategories, 1, 2);
             foreach ($createdCategoriesSliced as $category) {
                 $movie->addIdCategory($category);
             }

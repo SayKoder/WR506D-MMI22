@@ -12,6 +12,7 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -34,24 +35,49 @@ class Movie
     private Collection $actors;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le titre du film doit au moins contenir {{ limit }} caractères',
+        maxMessage: 'Le titre du film ne doit pas dépasser {{ limit }} caractères'
+    )]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Type(\DateTimeInterface::class)]
+    #[Assert\NotBlank]
     private ?\DateTimeImmutable $releaseDate = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\NotBlank]
+    #[Assert\Range(
+        min: 0,
+        max: 300,
+        notInRangeMessage: 'La durée doit être comprise entre {{ min }} et {{ max }} minutes',
+    )]
     private ?int $duration = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $entries = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(
+        min: 0,
+        max: 10,
+        notInRangeMessage: 'La note doit être comprise entre {{ min }} et {{ max }}',
+    )]
     private ?float $rating = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom du réalisateur doit être de {{ limit }} caractères',
+        maxMessage: 'Le nom du réalisateur ne doit pas dépasser {{ limit }} caractères'
+    )]
     private ?string $director = null;
 
     #[ORM\Column(length: 255, nullable: true)]
