@@ -7,10 +7,18 @@ use App\Repository\CategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 
 #[ORM\Entity(repositoryClass: CategoryRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['titre' => 'partial', 'movies.title'=>'partial'])]
+#[ApiFilter(OrderFilter::class, properties: ['titre', 'createdAt', 'updateAt'])]
+#[ApiFilter(RangeFilter::class, properties: ['createdAt', 'updateAt'])]
+
 class Category
 {
     #[ORM\Id]
@@ -89,8 +97,7 @@ class Category
     public function addMovie(Movie $movie): static
     {
         if (!$this->movies->contains($movie)) {
-            $this->movies->add($movie);
-            $movie->addIdCategory($this);
+            $this->movies->add($movie);$movie->addIdCategory($this);
         }
 
         return $this;

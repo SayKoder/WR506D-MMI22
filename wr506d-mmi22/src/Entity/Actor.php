@@ -10,12 +10,15 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
-#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial', 'firstname' => 'partial', 'movies.title'=>'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['lastname' => 'partial', 'firstname' => 'partial', 'movies.title'=>'partial', 'nationality' => 'partial', 'gender' => 'exact'])]
+#[ApiFilter(OrderFilter::class, properties: ['firstname', 'lastname', 'dob', 'awards', 'nationality'])]
+#[ApiFilter(RangeFilter::class, properties: ['dob','awards'])]
 
 class Actor
 {
