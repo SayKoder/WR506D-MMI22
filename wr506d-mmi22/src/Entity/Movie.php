@@ -8,10 +8,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ApiResource]
+#[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'duration', 'rating', 'director', 'media', 'actors.firstname' => 'partial', 'actors.lastname' => 'partial', 'id_category.titre' => 'partial'])]
+#[ApiFilter(OrderFilter::class, properties: ['title', 'releaseDate', 'duration', 'entries', 'rating', 'director', 'createdAt', 'updateAt'])]
+#[ApiFilter(RangeFilter::class, properties: ['releaseDate', 'duration', 'entries', 'rating', 'createdAt', 'updateAt'])]
+
 class Movie
 {
     #[ORM\Id]
