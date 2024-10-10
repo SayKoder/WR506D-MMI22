@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use ApiPlatform\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Doctrine\Orm\Filter\RangeFilter;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 #[ORM\Entity(repositoryClass: ActorRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -28,27 +30,52 @@ class Actor
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le nom de famille doit au moins contenir {{ limit }} caractères',
+        maxMessage: 'Le nom de famille ne doit pas dépasser {{ limit }} caractères'
+    )]
     private ?string $lastname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Length(
+        min: 3,
+        max: 50,
+        minMessage: 'Le prénom doit au moins contenir {{ limit }} caractères',
+        maxMessage: 'Le prénom ne doit pas dépasser {{ limit }} caractères'
+    )]
     private ?string $firstname = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\DateTime]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $dob = null;
 
     #[ORM\Column(nullable: true)]
+    #[Assert\Range(
+        min: 0,
+        max: 10,
+    )]
     private ?int $awards = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $bio = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\Country(
+        message: 'Le pays doit être en  alpha-2 (FR, US, ...)',
+    )]
     private ?string $nationality = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $media = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotNull(
+        message: 'Le genre doit être renseigné (M, F, Autre)',
+    )]
+    #[Assert\Type('string')]
     private ?string $gender = null;
 
     /**
@@ -64,6 +91,8 @@ class Actor
     private ?\DateTimeInterface $updateAt = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\DateTime]
+    #[Assert\NotBlank]
     private ?\DateTimeInterface $deathDate = null;
 
     public function __construct()
