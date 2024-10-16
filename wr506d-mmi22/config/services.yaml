@@ -24,3 +24,5 @@ services:
     # please note that last definitions always *replace* previous ones
     app.my_service:
         class: App\Services\Slugify
+
+    
