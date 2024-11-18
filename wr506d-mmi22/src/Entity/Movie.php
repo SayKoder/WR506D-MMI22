@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: MovieRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ApiResource]
+#[ApiResource(paginationItemsPerPage: 100)]
 #[ApiFilter(SearchFilter::class, properties: ['title' => 'partial', 'duration', 'rating', 'director', 'media', 'actors.firstname' => 'partial', 'actors.lastname' => 'partial', 'id_category.titre' => 'partial'])]
 #[ApiFilter(OrderFilter::class, properties: ['title', 'releaseDate', 'duration', 'entries', 'rating', 'director', 'createdAt', 'updateAt'])]
 #[ApiFilter(RangeFilter::class, properties: ['releaseDate', 'duration', 'entries', 'rating', 'createdAt', 'updateAt'])]
