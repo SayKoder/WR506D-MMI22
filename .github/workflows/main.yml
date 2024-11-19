@@ -17,6 +17,8 @@ jobs:
       with:
         php-version: '8.2'
     - uses: actions/checkout@v3
+    - name: GET Directory
+      run: ls -lisa
     - name: Change Directory
       run: cd wr506d-mmi22
     - name: Copy .env.test.local
