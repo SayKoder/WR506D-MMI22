@@ -41,7 +41,11 @@ jobs:
         touch data/database.sqlite
 
     - name: Run PHPUnit
-      run: vendor/bin/phpunit tests/
+      run: 
+        cd wr506d-mmi22 
+        vendor/bin/phpunit tests/
 
     - name: Run PHP_CodeSniffer
-      run: vendor/bin/phpcs --standard=PSR2 src/
+      run: 
+        cd wr506d-mmi22 
+        vendor/bin/phpcs --standard=PSR2 src/
