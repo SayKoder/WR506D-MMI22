@@ -17,6 +17,8 @@ jobs:
       with:
         php-version: '8.2'
     - uses: actions/checkout@v3
+    - name: Change Directory
+      run: cd wr506d-mmi22
     - name: Copy .env.test.local
       run: php -r "file_exists('wr506d-mmi22/.env.test.local') || copy('wr506d-mmi22/.env.test', 'wr506d-mmi22/.env.test.local');"
     - name: Cache Composer packages
