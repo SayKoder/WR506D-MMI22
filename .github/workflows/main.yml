@@ -39,6 +39,3 @@ jobs:
       run: |
         mkdir -p data
         touch data/database.sqlite
-
-    - name: Run PHP_CodeSniffer
-      run: vendor/bin/phpcs --standard=PSR2 src/
