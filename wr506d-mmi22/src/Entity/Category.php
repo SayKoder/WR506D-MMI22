@@ -105,7 +105,8 @@ class Category
     public function addMovie(Movie $movie): static
     {
         if (!$this->movies->contains($movie)) {
-            $this->movies->add($movie);$movie->addIdCategory($this);
+            $this->movies->add($movie);
+            $movie->addIdCategory($this);
         }
 
         return $this;
@@ -115,7 +116,7 @@ class Category
     {
         if ($this->movies->removeElement($movie)) {
             if ($movie->getIdCategory()->contains($this)) {
-                $movie->removeIdCategory($this); 
+                $movie->removeIdCategory($this);
             }
         }
 

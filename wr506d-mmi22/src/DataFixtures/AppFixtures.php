@@ -10,7 +10,6 @@ use App\Entity\Actor;
 use App\Entity\Movie;
 use App\Entity\Category;
 
-
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager)
@@ -19,15 +18,15 @@ class AppFixtures extends Fixture
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Person($faker));
         $faker->addProvider(new \Xylis\FakerCinema\Provider\Movie($faker));
 
+        // Generate actors
         $actors = $faker->actors($gender = null, $count = 190, $duplicates = false);
         $createdActors = [];
         foreach ($actors as $i) {
-            $fullname = $i; //ex : Christian Bale
+            $fullname = $i;
             $fullnameExploded = explode(' ', $fullname);
 
-            $firstname = $fullnameExploded[0]; //ex : Christian
-            $lastname = $fullnameExploded[1]; //ex : Bale
-
+            $firstname = $fullnameExploded[0];
+            $lastname = $fullnameExploded[1];
 
             $actor = new Actor();
             $actor->setFirstname($firstname);
@@ -68,15 +67,16 @@ class AppFixtures extends Fixture
             $movie->setCreatedAt(new DateTimeImmutable());
 
             shuffle($createdActors);
-            $createdActorsSliced = array_slice($createdActors, 1, 4);
+            $createdActorsSliced = array_slice($createdActors, 0, 4);
             foreach ($createdActorsSliced as $actor) {
                 $movie->addActor($actor);
             }
 
+            // Assign random categories to the movie
             shuffle($createdCategories);
-            $createdCategoriesSliced = array_slice($createdCategories, 1, 2);
+            $createdCategoriesSliced = array_slice($createdCategories, 0, 2);
             foreach ($createdCategoriesSliced as $category) {
-                $movie->addIdCategory($category);
+                $movie->addCategory($category);
             }
 
             $manager->persist($movie);
